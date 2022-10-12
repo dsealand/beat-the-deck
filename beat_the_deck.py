@@ -1,8 +1,8 @@
-import sys
 import pyCardDeck
 from typing import List
 from pyCardDeck.cards import PokerCard
 import math
+import random
 
 class BeatTheDeck:
     def __init__(self):
@@ -45,13 +45,10 @@ class BeatTheDeck:
         """
         Play one turn.
         """
-        # stack = self.hardFirst()
-        stack = self.naive()
-        if int(self.board[stack][0].rank) > 7.5:
-            choice = 0
-        else:
-            choice = 2
-        
+        # stack, choice = self.hardFirst()
+        stack, choice = self.naive()
+        # stack, choice = self.random()
+
         print("stack and choice: ", stack, choice)
 
         card = self.deck.draw()
@@ -79,7 +76,12 @@ class BeatTheDeck:
                 bestStackValue = stackValue
                 bestStackIndex = index
         
-        return bestStackIndex
+        if int(self.board[bestStackIndex][0].rank) > 7.5:
+            choice = 0
+        else:
+            choice = 2
+        
+        return bestStackIndex, choice
 
     def hardFirst(self):
         """
@@ -93,7 +95,24 @@ class BeatTheDeck:
                 bestStackValue = stackValue
                 bestStackIndex = index
         
-        return bestStackIndex
+        if int(self.board[bestStackIndex][0].rank) > 7.5:
+            choice = 0
+        else:
+            choice = 2
+
+        return bestStackIndex, choice
+
+    def random(self):
+        """
+        Select a random stack and over/under choice.
+        """
+        stack = random.randint(0, len(self.board)-1)
+        if int(self.board[stack][0].rank) > 7.5:
+            choice = 0
+        else:
+            choice = 2
+        return stack, choice
+
 
 def is_valid(card, stack, choice):
     """
